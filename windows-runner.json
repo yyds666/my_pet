@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "petId": "graduate-zombie",
+  "followCodexPetSize": true,
+  "codexSizeKey": "avatar-overlay-mascot-width-px",
+  "sizeOffsetPx": 0,
+  "sizeStepPx": 16,
+  "minimumWidthPx": 80,
+  "maximumWidthPx": 224,
+  "features": {
+    "directionThoughts": true,
+    "fourWayHop": true,
+    "dragHop": true,
+    "sizeControls": true,
+    "hardAlphaColorKey": true
+  }
+}

@@ -1,0 +1,3 @@
+visual_qa=pass
+
+The source art has no intentional purple outline or shadow. The Windows renderer resizes each frame before converting alpha to only 0 or 255, preventing the #ff00ff transparent-window key from bleeding through antialiased edges. The v2 atlas remains unchanged and valid. The runtime reads Codex's avatar-overlay-mascot-width-px setting, combines it with a local offset, polls for changes, and exposes minus, plus, and Follow Codex controls. The launcher uses the Codex pet directory as its shared source, with a local fallback only when the shared script is absent.

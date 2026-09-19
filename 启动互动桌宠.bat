@@ -2,24 +2,26 @@
 setlocal
 chcp 65001 >nul
 set "PET_DIR=%~dp0"
+set "CODEX_PET_DIR=%USERPROFILE%\.codex\pets\graduate-zombie"
 set "CODEX_PY_DIR=%USERPROFILE%\.cache\codex-runtimes\codex-primary-runtime\dependencies\python"
 set "CODEX_PY=%CODEX_PY_DIR%\python.exe"
 set "CODEX_PYW=%CODEX_PY_DIR%\pythonw.exe"
-set "PET_SCRIPT=%PET_DIR%interactive_pet.py"
+set "PET_SCRIPT=%CODEX_PET_DIR%\interactive_pet.py"
+if not exist "%PET_SCRIPT%" set "PET_SCRIPT=%PET_DIR%interactive_pet.py"
 set "PET_LOG=%PET_DIR%启动日志.txt"
 
 if exist "%CODEX_PYW%" (
-  "%CODEX_PY%" -B "%PET_SCRIPT%" --self-test >"%PET_LOG%" 2>&1
+  "%CODEX_PY%" -B "%PET_SCRIPT%" --pet-dir "%CODEX_PET_DIR%" --self-test >"%PET_LOG%" 2>&1
   if errorlevel 1 goto launch_failed
-  start "" "%CODEX_PYW%" -B "%PET_SCRIPT%" 1>>"%PET_LOG%" 2>>&1
+  start "" "%CODEX_PYW%" -B "%PET_SCRIPT%" --pet-dir "%CODEX_PET_DIR%" 1>>"%PET_LOG%" 2>>&1
   exit /b 0
 )
 
 where pyw.exe >nul 2>nul
 if not errorlevel 1 (
-  py.exe -3 -B "%PET_SCRIPT%" --self-test >"%PET_LOG%" 2>&1
+  py.exe -3 -B "%PET_SCRIPT%" --pet-dir "%CODEX_PET_DIR%" --self-test >"%PET_LOG%" 2>&1
   if errorlevel 1 goto launch_failed
-  start "" pyw.exe -3 -B "%PET_SCRIPT%" 1>>"%PET_LOG%" 2>>&1
+  start "" pyw.exe -3 -B "%PET_SCRIPT%" --pet-dir "%CODEX_PET_DIR%" 1>>"%PET_LOG%" 2>>&1
   exit /b 0
 )
 

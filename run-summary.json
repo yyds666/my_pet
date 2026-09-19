@@ -10,5 +10,7 @@
   "jumpingMotion": "arms-forward legs-together upright vertical zombie hop",
   "directionalMovement": "four-way facing, paired-leg zombie hops, 130px discrete steps, turn at edge before return",
   "interactiveFrames": ["decoded/interactive/hop-up.png", "decoded/interactive/hop-down.png"],
+  "windowsRenderer": "resize then hard-alpha for clean Windows color-key transparency",
+  "sharedRuntime": "Codex pet directory is the source of sprites, directional frames, size setting, runner config, and interaction code",
   "warnings": "minor preview-only edge fringe and intermediate continuity warnings accepted after independent visual review; final atlas and interactive assets are clean"
 }

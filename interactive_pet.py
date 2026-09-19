@@ -9,7 +9,9 @@ from __future__ import annotations
 
 import argparse
 import ctypes
+import json
 import math
+import os
 import sys
 import time
 import tkinter as tk
@@ -25,6 +27,92 @@ CELL_HEIGHT = 208
 ATLAS_WIDTH = 1536
 ATLAS_HEIGHT = 2288
 TRANSPARENT_KEY = "#ff00ff"
+MIN_PET_WIDTH = 80
+MAX_PET_WIDTH = 224
+DEFAULT_CODEX_PET_WIDTH = 112
+DEFAULT_SIZE_STEP = 16
+ALPHA_CUTOFF = 48
+CODEX_SIZE_KEY = "avatar-overlay-mascot-width-px"
+
+
+def clamp_pet_width(value: int | float) -> int:
+    return round(max(MIN_PET_WIDTH, min(MAX_PET_WIDTH, value)))
+
+
+def harden_alpha_for_color_key(image: Image.Image) -> Image.Image:
+    """Prevent Windows' magenta color key from bleeding through soft edges."""
+    rgba = image.convert("RGBA")
+    alpha = rgba.getchannel("A").point(lambda value: 255 if value >= ALPHA_CUTOFF else 0)
+    rgba.putalpha(alpha)
+    return rgba
+
+
+def default_codex_home() -> Path:
+    configured = os.environ.get("CODEX_HOME")
+    return Path(configured).expanduser() if configured else Path.home() / ".codex"
+
+
+class CodexPetBridge:
+    """Read shared assets/config and follow Codex's persisted pet-size setting."""
+
+    def __init__(self, pet_dir: Path, codex_home: Path | None = None) -> None:
+        self.pet_dir = pet_dir
+        self.codex_home = codex_home or default_codex_home()
+        self.global_state_path = self.codex_home / ".codex-global-state.json"
+        self.runner_config_path = self.pet_dir / "windows-runner.json"
+
+    @staticmethod
+    def _read_json(path: Path) -> dict:
+        try:
+            value = json.loads(path.read_text(encoding="utf-8"))
+            return value if isinstance(value, dict) else {}
+        except (OSError, ValueError, TypeError):
+            return {}
+
+    def read_codex_width(self) -> int:
+        configured_key = self.runner_config().get("codexSizeKey", CODEX_SIZE_KEY)
+        size_key = configured_key if isinstance(configured_key, str) else CODEX_SIZE_KEY
+        state = self._read_json(self.global_state_path)
+        atoms = state.get("electron-persisted-atom-state", {})
+        raw = atoms.get(size_key, DEFAULT_CODEX_PET_WIDTH) if isinstance(atoms, dict) else DEFAULT_CODEX_PET_WIDTH
+        return clamp_pet_width(raw if isinstance(raw, (int, float)) else DEFAULT_CODEX_PET_WIDTH)
+
+    def runner_config(self) -> dict:
+        return self._read_json(self.runner_config_path)
+
+    def size_step(self) -> int:
+        raw = self.runner_config().get("sizeStepPx", DEFAULT_SIZE_STEP)
+        if not isinstance(raw, (int, float)):
+            return DEFAULT_SIZE_STEP
+        return max(4, min(48, round(raw)))
+
+    def size_offset(self) -> int:
+        raw = self.runner_config().get("sizeOffsetPx", 0)
+        return round(raw) if isinstance(raw, (int, float)) else 0
+
+    def effective_width(self) -> int:
+        return clamp_pet_width(self.read_codex_width() + self.size_offset())
+
+    def set_size_offset(self, offset: int) -> None:
+        config = self.runner_config()
+        configured_key = config.get("codexSizeKey", CODEX_SIZE_KEY)
+        size_key = configured_key if isinstance(configured_key, str) else CODEX_SIZE_KEY
+        config.update(
+            {
+                "schemaVersion": 1,
+                "petId": "graduate-zombie",
+                "followCodexPetSize": True,
+                "codexSizeKey": size_key,
+                "sizeOffsetPx": round(offset),
+                "sizeStepPx": self.size_step(),
+                "minimumWidthPx": MIN_PET_WIDTH,
+                "maximumWidthPx": MAX_PET_WIDTH,
+            }
+        )
+        self.pet_dir.mkdir(parents=True, exist_ok=True)
+        temporary = self.runner_config_path.with_suffix(".json.tmp")
+        temporary.write_text(json.dumps(config, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        os.replace(temporary, self.runner_config_path)
 
 
 @dataclass(frozen=True)
@@ -62,37 +150,48 @@ def enable_windows_dpi_awareness() -> None:
 
 
 class SpriteAtlas:
-    def __init__(self, path: Path, scale: float) -> None:
+    def __init__(self, path: Path, width_px: int) -> None:
         self.path = path
-        self.scale = scale
-        self.image = Image.open(path).convert("RGBA")
+        with Image.open(path) as source:
+            self.image = source.convert("RGBA")
         if self.image.size != (ATLAS_WIDTH, ATLAS_HEIGHT):
             raise ValueError(
                 f"Expected a v2 1536x2288 spritesheet, got {self.image.size[0]}x{self.image.size[1]}"
             )
-        self.width = round(CELL_WIDTH * scale)
-        self.height = round(CELL_HEIGHT * scale)
+        self.width = CELL_WIDTH
+        self.height = CELL_HEIGHT
+        self.scale = 1.0
+        self.set_width_px(width_px)
         self.interactive_frames_dir = path.with_name("interactive_frames")
         self._frames: dict[str, list[ImageTk.PhotoImage]] = {}
+
+    def set_width_px(self, width_px: int) -> None:
+        self.width = clamp_pet_width(width_px)
+        self.scale = self.width / CELL_WIDTH
+        self.height = round(CELL_HEIGHT * self.scale)
 
     def source_frame(self, name: str, animation: Animation, column: int) -> Image.Image:
         external_dir = INTERACTIVE_FRAME_DIRS.get(name)
         if external_dir is not None:
             external_path = self.interactive_frames_dir / external_dir / f"{column:02d}.png"
             if external_path.is_file():
-                return Image.open(external_path).convert("RGBA")
+                with Image.open(external_path) as source:
+                    return source.convert("RGBA")
         left = column * CELL_WIDTH
         top = animation.row * CELL_HEIGHT
         return self.image.crop((left, top, left + CELL_WIDTH, top + CELL_HEIGHT))
+
+    def prepared_frame(self, name: str, animation: Animation, column: int) -> Image.Image:
+        cell = self.source_frame(name, animation, column)
+        if cell.size != (self.width, self.height):
+            cell = cell.resize((self.width, self.height), Image.Resampling.LANCZOS)
+        return harden_alpha_for_color_key(cell)
 
     def load_tk_frames(self) -> None:
         for name, animation in ANIMATIONS.items():
             frames: list[ImageTk.PhotoImage] = []
             for column in range(animation.frame_count):
-                cell = self.source_frame(name, animation, column)
-                if self.scale != 1.0:
-                    cell = cell.resize((self.width, self.height), Image.Resampling.LANCZOS)
-                frames.append(ImageTk.PhotoImage(cell))
+                frames.append(ImageTk.PhotoImage(self.prepared_frame(name, animation, column)))
             self._frames[name] = frames
 
     def frame(self, state: str, index: int) -> ImageTk.PhotoImage:
@@ -112,9 +211,15 @@ class SpriteAtlas:
                     if not external_path.is_file():
                         problems.append(f"missing directional frame: {external_path}")
                         continue
-                alpha = self.source_frame(name, animation, column).getchannel("A")
+                source_alpha = self.source_frame(name, animation, column).getchannel("A")
+                if source_alpha.getbbox() is None:
+                    problems.append(f"{name} frame {column} is empty")
+                    continue
+                alpha = self.prepared_frame(name, animation, column).getchannel("A")
                 if alpha.getbbox() is None:
                     problems.append(f"{name} frame {column} is empty")
+                if sum(alpha.histogram()[1:255]) != 0:
+                    problems.append(f"{name} frame {column} still has soft alpha")
         return problems
 
 
@@ -127,6 +232,10 @@ class ThoughtPalette:
         pet_rect: tuple[int, int, int, int],
         work_area: tuple[int, int, int, int],
         choose: Callable[[str], None],
+        pet_width: int,
+        shrink: Callable[[], None],
+        enlarge: Callable[[], None],
+        follow_codex: Callable[[], None],
     ) -> None:
         self.choose = choose
         self.window = tk.Toplevel(parent)
@@ -138,7 +247,7 @@ class ThoughtPalette:
         except tk.TclError:
             pass
 
-        width, height = 252, 104
+        width, height = 252, 146
         pet_x, pet_y, pet_w, _ = pet_rect
         left, top, right, bottom = work_area
         x = max(left, min(right - width, pet_x + pet_w // 2 - width // 2))
@@ -186,6 +295,36 @@ class ThoughtPalette:
             canvas.tag_bind(tag, "<Leave>", lambda event, t=tag: self._hover(canvas, t, False))
             canvas.tag_bind(tag, "<Button-1>", lambda event, d=direction: self.choose(d))
 
+        button_style = {
+            "bg": "#dff3ff",
+            "fg": "#173f67",
+            "activebackground": "#9edcff",
+            "activeforeground": "#173f67",
+            "relief": "flat",
+            "font": ("Microsoft YaHei UI", 10, "bold"),
+            "cursor": "hand2",
+            "takefocus": False,
+        }
+        tk.Button(self.window, text="−", command=shrink, **button_style).place(
+            x=13, y=106, width=38, height=30
+        )
+        tk.Label(
+            self.window,
+            text=f"{pet_width}px",
+            bg="#fffdf7",
+            fg="#26334d",
+            font=("Microsoft YaHei UI", 9, "bold"),
+        ).place(x=57, y=106, width=58, height=30)
+        tk.Button(self.window, text="+", command=enlarge, **button_style).place(
+            x=121, y=106, width=38, height=30
+        )
+        tk.Button(
+            self.window,
+            text="跟随 Codex",
+            command=follow_codex,
+            **button_style,
+        ).place(x=165, y=106, width=76, height=30)
+
     @staticmethod
     def _hover(canvas: tk.Canvas, tag: str, active: bool) -> None:
         items = canvas.find_withtag(tag)
@@ -198,15 +337,24 @@ class ThoughtPalette:
 
 
 class DesktopPet:
-    def __init__(self, root: tk.Tk, atlas: SpriteAtlas) -> None:
+    def __init__(
+        self,
+        root: tk.Tk,
+        atlas: SpriteAtlas,
+        bridge: CodexPetBridge,
+        follow_codex_size: bool = True,
+    ) -> None:
         self.root = root
         self.atlas = atlas
+        self.bridge = bridge
+        self.follow_codex_size = follow_codex_size
         self.width = atlas.width
         self.height = atlas.height
         self.state = "idle"
         self.frame_index = 0
         self.frame_job: str | None = None
         self.trip_job: str | None = None
+        self.size_sync_job: str | None = None
         self.palette: ThoughtPalette | None = None
         self.dragging = False
         self.traveling = False
@@ -248,11 +396,14 @@ class DesktopPet:
 
         self.context_menu = tk.Menu(root, tearoff=False)
         self.context_menu.add_command(label="选择蹦跳方向", command=self.show_thoughts)
+        self.context_menu.add_command(label="显示大小按钮", command=self.show_thoughts)
+        self.context_menu.add_command(label="跟随 Codex 尺寸", command=self.follow_codex_width)
         self.context_menu.add_command(label="回到初始位置", command=self.return_home)
         self.context_menu.add_separator()
         self.context_menu.add_command(label="退出互动桌宠", command=self.close)
 
         self.set_state("idle")
+        self.size_sync_job = self.root.after(1000, self.sync_codex_size)
 
     def work_area(self) -> tuple[int, int, int, int]:
         if sys.platform == "win32":
@@ -295,6 +446,57 @@ class DesktopPet:
         image = self.atlas.frame(self.state, self.frame_index)
         self.canvas.itemconfigure(self.sprite, image=image)
         self.canvas.image = image
+
+    def apply_width(self, width_px: int) -> None:
+        target = clamp_pet_width(width_px)
+        if target == self.width:
+            return
+
+        old_x, old_y = self.position()
+        anchor_x = old_x + self.width // 2
+        anchor_bottom = old_y + self.height
+        self.atlas.set_width_px(target)
+        self.atlas.load_tk_frames()
+        self.width = self.atlas.width
+        self.height = self.atlas.height
+        self.canvas.configure(width=self.width, height=self.height)
+
+        left, top, right, bottom = self.work_area()
+        new_x = max(left, min(right - self.width, anchor_x - self.width // 2))
+        new_y = max(top, min(bottom - self.height, anchor_bottom - self.height))
+        self.root.geometry(f"{self.width}x{self.height}+{new_x}+{new_y}")
+        self.home = (right - self.width - 48, bottom - self.height - 36)
+        self.render_frame()
+
+    def change_width(self, delta: int) -> None:
+        if self.traveling:
+            return
+        target = clamp_pet_width(self.width + delta)
+        codex_width = self.bridge.read_codex_width()
+        self.bridge.set_size_offset(target - codex_width)
+        self.hide_thoughts()
+        self.apply_width(target)
+        self.root.after(80, self.show_thoughts)
+
+    def follow_codex_width(self) -> None:
+        if self.traveling:
+            return
+        self.bridge.set_size_offset(0)
+        self.hide_thoughts()
+        self.apply_width(self.bridge.read_codex_width())
+        self.root.after(80, self.show_thoughts)
+
+    def sync_codex_size(self) -> None:
+        self.size_sync_job = None
+        if self.follow_codex_size and not self.dragging and not self.traveling:
+            target = self.bridge.effective_width()
+            if target != self.width:
+                had_palette = self.palette is not None
+                self.hide_thoughts()
+                self.apply_width(target)
+                if had_palette:
+                    self.root.after(80, self.show_thoughts)
+        self.size_sync_job = self.root.after(1000, self.sync_codex_size)
 
     def schedule_next_frame(self) -> None:
         animation = ANIMATIONS[self.state]
@@ -362,6 +564,10 @@ class DesktopPet:
             (x, y, self.width, self.height),
             self.work_area(),
             self.choose_direction,
+            self.width,
+            lambda: self.change_width(-self.bridge.size_step()),
+            lambda: self.change_width(self.bridge.size_step()),
+            self.follow_codex_width,
         )
 
     def hide_thoughts(self) -> None:
@@ -497,6 +703,8 @@ class DesktopPet:
             self.root.after_cancel(self.trip_job)
         if self.frame_job is not None:
             self.root.after_cancel(self.frame_job)
+        if self.size_sync_job is not None:
+            self.root.after_cancel(self.size_sync_job)
         self.root.destroy()
 
 
@@ -505,31 +713,58 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--sprite",
         type=Path,
-        default=Path(__file__).with_name("spritesheet.webp"),
+        default=None,
         help="Path to the v2 spritesheet",
     )
-    parser.add_argument("--scale", type=float, default=1.0, help="Display scale from 0.6 to 1.8")
+    parser.add_argument(
+        "--pet-dir",
+        type=Path,
+        default=None,
+        help="Shared Codex pet directory; defaults to ~/.codex/pets/graduate-zombie",
+    )
+    parser.add_argument(
+        "--scale",
+        type=float,
+        default=None,
+        help="Optional one-session scale override; otherwise follows the Codex pet-size setting",
+    )
     parser.add_argument("--self-test", action="store_true", help="Validate assets without opening a window")
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
-    scale = max(0.6, min(1.8, args.scale))
-    atlas = SpriteAtlas(args.sprite.resolve(), scale)
+    installed_pet_dir = default_codex_home() / "pets" / "graduate-zombie"
+    fallback_pet_dir = Path(__file__).resolve().parent
+    pet_dir = args.pet_dir.resolve() if args.pet_dir else installed_pet_dir
+    if not (pet_dir / "spritesheet.webp").is_file() and args.sprite is None:
+        pet_dir = fallback_pet_dir
+
+    bridge = CodexPetBridge(pet_dir)
+    sprite = args.sprite.resolve() if args.sprite else pet_dir / "spritesheet.webp"
+    follow_codex_size = args.scale is None
+    width_px = (
+        bridge.effective_width()
+        if follow_codex_size
+        else clamp_pet_width(CELL_WIDTH * max(0.4, min(1.2, args.scale)))
+    )
+    atlas = SpriteAtlas(sprite.resolve(), width_px)
     problems = atlas.self_test()
     if problems:
         for problem in problems:
             print(problem, file=sys.stderr)
         return 1
     if args.self_test:
-        print("interactive_pet self-test: ok")
+        print(
+            "interactive_pet self-test: ok "
+            f"(pet_dir={pet_dir}, width={atlas.width}px, hard_alpha=true)"
+        )
         return 0
 
     enable_windows_dpi_awareness()
     root = tk.Tk()
     atlas.load_tk_frames()
-    DesktopPet(root, atlas)
+    DesktopPet(root, atlas, bridge, follow_codex_size=follow_codex_size)
     root.mainloop()
     return 0
 
