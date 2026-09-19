@@ -1,0 +1,3 @@
+visual_qa=pass
+
+Right and left movement clearly face the travel direction with forward arms and a paired-foot hop cadence. Up and down visibly turn toward their direction while retaining recognizable face and glasses. No blocking clipping, duplicated parts, identity break, or forbidden effects were found. The v2 atlas validates at 1536x2288, 8x11, spriteVersionNumber 2, with zero residual chroma-fringe pixels. Preview-only edge fringe is minor; the final despilled atlas and interactive frame assets are clean.

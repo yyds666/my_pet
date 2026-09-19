@@ -36,10 +36,16 @@ class Animation:
 
 ANIMATIONS = {
     "idle": Animation(0, 6, (280, 110, 110, 140, 140, 320)),
-    "hop-right": Animation(1, 8, (120, 120, 120, 120, 120, 120, 120, 220)),
-    "hop-left": Animation(2, 8, (120, 120, 120, 120, 120, 120, 120, 220)),
-    "jump": Animation(4, 5, (140, 140, 140, 140, 280)),
+    "hop-right": Animation(1, 8, (130, 130, 130, 130, 150, 130, 150, 220)),
+    "hop-left": Animation(2, 8, (130, 130, 130, 130, 150, 130, 150, 220)),
+    "hop-up": Animation(4, 5, (170, 170, 190, 170, 260)),
+    "hop-down": Animation(4, 5, (170, 170, 190, 170, 260)),
     "thinking": Animation(8, 6, (150, 150, 150, 150, 150, 280)),
+}
+
+INTERACTIVE_FRAME_DIRS = {
+    "hop-up": "up",
+    "hop-down": "down",
 }
 
 
@@ -66,15 +72,24 @@ class SpriteAtlas:
             )
         self.width = round(CELL_WIDTH * scale)
         self.height = round(CELL_HEIGHT * scale)
+        self.interactive_frames_dir = path.with_name("interactive_frames")
         self._frames: dict[str, list[ImageTk.PhotoImage]] = {}
+
+    def source_frame(self, name: str, animation: Animation, column: int) -> Image.Image:
+        external_dir = INTERACTIVE_FRAME_DIRS.get(name)
+        if external_dir is not None:
+            external_path = self.interactive_frames_dir / external_dir / f"{column:02d}.png"
+            if external_path.is_file():
+                return Image.open(external_path).convert("RGBA")
+        left = column * CELL_WIDTH
+        top = animation.row * CELL_HEIGHT
+        return self.image.crop((left, top, left + CELL_WIDTH, top + CELL_HEIGHT))
 
     def load_tk_frames(self) -> None:
         for name, animation in ANIMATIONS.items():
             frames: list[ImageTk.PhotoImage] = []
             for column in range(animation.frame_count):
-                left = column * CELL_WIDTH
-                top = animation.row * CELL_HEIGHT
-                cell = self.image.crop((left, top, left + CELL_WIDTH, top + CELL_HEIGHT))
+                cell = self.source_frame(name, animation, column)
                 if self.scale != 1.0:
                     cell = cell.resize((self.width, self.height), Image.Resampling.LANCZOS)
                 frames.append(ImageTk.PhotoImage(cell))
@@ -88,11 +103,16 @@ class SpriteAtlas:
         problems: list[str] = []
         for name, animation in ANIMATIONS.items():
             for column in range(animation.frame_count):
-                left = column * CELL_WIDTH
-                top = animation.row * CELL_HEIGHT
-                alpha = self.image.crop(
-                    (left, top, left + CELL_WIDTH, top + CELL_HEIGHT)
-                ).getchannel("A")
+                if name in INTERACTIVE_FRAME_DIRS:
+                    external_path = (
+                        self.interactive_frames_dir
+                        / INTERACTIVE_FRAME_DIRS[name]
+                        / f"{column:02d}.png"
+                    )
+                    if not external_path.is_file():
+                        problems.append(f"missing directional frame: {external_path}")
+                        continue
+                alpha = self.source_frame(name, animation, column).getchannel("A")
                 if alpha.getbbox() is None:
                     problems.append(f"{name} frame {column} is empty")
         return problems
@@ -191,6 +211,7 @@ class DesktopPet:
         self.dragging = False
         self.traveling = False
         self.press_root = (0, 0)
+        self.last_drag_root = (0, 0)
         self.window_at_press = (0, 0)
         self.press_time = 0.0
 
@@ -291,6 +312,7 @@ class DesktopPet:
             return
         self.hide_thoughts()
         self.press_root = (event.x_root, event.y_root)
+        self.last_drag_root = self.press_root
         self.window_at_press = self.position()
         self.press_time = time.monotonic()
         self.dragging = False
@@ -300,6 +322,9 @@ class DesktopPet:
             return
         dx = event.x_root - self.press_root[0]
         dy = event.y_root - self.press_root[1]
+        step_dx = event.x_root - self.last_drag_root[0]
+        step_dy = event.y_root - self.last_drag_root[1]
+        self.last_drag_root = (event.x_root, event.y_root)
         if abs(dx) + abs(dy) > 5:
             self.dragging = True
 
@@ -310,10 +335,10 @@ class DesktopPet:
         y = max(top, min(bottom - self.height, y))
         self.root.geometry(f"+{x}+{y}")
 
-        if abs(dx) >= abs(dy):
-            wanted = "hop-right" if dx >= 0 else "hop-left"
+        if abs(step_dx) >= abs(step_dy):
+            wanted = "hop-right" if step_dx >= 0 else "hop-left"
         else:
-            wanted = "jump"
+            wanted = "hop-down" if step_dy >= 0 else "hop-up"
         if wanted != self.state:
             self.set_state(wanted)
 
@@ -372,49 +397,79 @@ class DesktopPet:
             self.set_state("idle")
             return
 
+        opposite = {"left": "right", "right": "left", "up": "down", "down": "up"}
+
+        def waypoints(
+            origin: tuple[int, int], destination: tuple[int, int]
+        ) -> list[tuple[int, int]]:
+            span = math.hypot(destination[0] - origin[0], destination[1] - origin[1])
+            count = max(1, math.ceil(span / 130.0))
+            return [
+                (
+                    round(origin[0] + (destination[0] - origin[0]) * index / count),
+                    round(origin[1] + (destination[1] - origin[1]) * index / count),
+                )
+                for index in range(count + 1)
+            ]
+
+        outward = waypoints((start_x, start_y), (target_x, target_y))
+        homeward = waypoints((target_x, target_y), (start_x, start_y))
+        segments: list[tuple[str, tuple[int, int], tuple[int, int]]] = []
+        segments.extend((direction, outward[i], outward[i + 1]) for i in range(len(outward) - 1))
+        turn_index = len(segments)
+        return_direction = opposite[direction]
+        segments.extend(
+            (return_direction, homeward[i], homeward[i + 1])
+            for i in range(len(homeward) - 1)
+        )
+
         self.traveling = True
-        state = "jump"
-        if direction == "left":
-            state = "hop-left"
-        elif direction == "right":
-            state = "hop-right"
-        self.set_state(state)
+        self.set_state(f"hop-{direction}")
 
-        started = time.perf_counter()
-        one_way = max(0.85, min(2.2, distance / 420.0))
-        total = one_way * 2.0
-        hop_count = max(2, round(distance / 125.0))
-
-        def animate() -> None:
-            elapsed = time.perf_counter() - started
-            overall = min(1.0, elapsed / total)
-            if overall <= 0.5:
-                line_progress = self.ease(overall * 2.0)
-            else:
-                line_progress = 1.0 - self.ease((overall - 0.5) * 2.0)
-
-            x = start_x + (target_x - start_x) * line_progress
-            y = start_y + (target_y - start_y) * line_progress
-            hop_phase = overall * hop_count * 2.0 * math.pi
-            lift = abs(math.sin(hop_phase)) * min(30.0, 18.0 + self.atlas.scale * 8.0)
-            if direction in ("left", "right"):
-                y -= lift
-            else:
-                x += math.sin(hop_phase) * 7.0
-
-            x = max(left, min(right - self.width, round(x)))
-            y = max(top, min(bottom - self.height, round(y)))
-            self.root.geometry(f"+{x}+{y}")
-
-            if overall < 1.0:
-                self.trip_job = self.root.after(16, animate)
-            else:
+        def run_segment(index: int) -> None:
+            if index >= len(segments):
                 self.root.geometry(f"+{start_x}+{start_y}")
                 self.traveling = False
                 self.trip_job = None
                 self.set_state("idle")
+                return
 
-        animate()
+            segment_direction, origin, destination = segments[index]
+            wanted_state = f"hop-{segment_direction}"
+            if wanted_state != self.state:
+                self.set_state(wanted_state)
+
+            started = time.perf_counter()
+            hop_duration = 0.92
+
+            def animate_hop() -> None:
+                elapsed = time.perf_counter() - started
+                progress = min(1.0, elapsed / hop_duration)
+                moved = self.ease(progress)
+                x = origin[0] + (destination[0] - origin[0]) * moved
+                y = origin[1] + (destination[1] - origin[1]) * moved
+
+                arc = math.sin(progress * math.pi)
+                if segment_direction in ("left", "right"):
+                    y -= arc * min(30.0, 20.0 + self.atlas.scale * 8.0)
+                else:
+                    x += arc * (7.0 if segment_direction == "up" else -7.0)
+
+                x = max(left, min(right - self.width, round(x)))
+                y = max(top, min(bottom - self.height, round(y)))
+                self.root.geometry(f"+{x}+{y}")
+
+                if progress < 1.0:
+                    self.trip_job = self.root.after(16, animate_hop)
+                    return
+
+                self.root.geometry(f"+{destination[0]}+{destination[1]}")
+                next_delay = 420 if index + 1 == turn_index else 170
+                self.trip_job = self.root.after(next_delay, lambda: run_segment(index + 1))
+
+            animate_hop()
+
+        run_segment(0)
 
     def return_home(self) -> None:
         if self.traveling:

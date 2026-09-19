@@ -8,5 +8,7 @@
   "lookDirections": 16,
   "visualQA": "pass",
   "jumpingMotion": "arms-forward legs-together upright vertical zombie hop",
-  "warnings": "minor review-only continuity and intermediate-direction warnings accepted after independent visual review"
+  "directionalMovement": "four-way facing, paired-leg zombie hops, 130px discrete steps, turn at edge before return",
+  "interactiveFrames": ["decoded/interactive/hop-up.png", "decoded/interactive/hop-down.png"],
+  "warnings": "minor preview-only edge fringe and intermediate continuity warnings accepted after independent visual review; final atlas and interactive assets are clean"
 }

@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "frames_root": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames",
+  "frames_root": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames",
   "states": [
     "idle",
     "running-right",
@@ -38,7 +38,7 @@
       "frames": [
         {
           "index": 0,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\idle\\00.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\idle\\00.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 11988,
@@ -53,7 +53,7 @@
         },
         {
           "index": 1,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\idle\\01.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\idle\\01.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 11901,
@@ -68,7 +68,7 @@
         },
         {
           "index": 2,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\idle\\02.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\idle\\02.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 11726,
@@ -83,7 +83,7 @@
         },
         {
           "index": 3,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\idle\\03.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\idle\\03.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 12003,
@@ -98,7 +98,7 @@
         },
         {
           "index": 4,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\idle\\04.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\idle\\04.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 11829,
@@ -113,7 +113,7 @@
         },
         {
           "index": 5,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\idle\\05.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\idle\\05.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 12123,
@@ -141,123 +141,123 @@
       "frames": [
         {
           "index": 0,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running-right\\00.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running-right\\00.png",
           "width": 192,
           "height": 208,
-          "nontransparent_pixels": 12646,
+          "nontransparent_pixels": 10063,
           "bbox": [
-            32,
-            6,
-            159,
-            202
+            37,
+            43,
+            155,
+            203
           ],
           "edge_pixels": 0,
-          "chroma_adjacent_pixels": 0
+          "chroma_adjacent_pixels": 119
         },
         {
           "index": 1,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running-right\\01.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running-right\\01.png",
           "width": 192,
           "height": 208,
-          "nontransparent_pixels": 12873,
+          "nontransparent_pixels": 9672,
           "bbox": [
-            30,
-            6,
-            161,
-            202
+            35,
+            55,
+            157,
+            203
           ],
           "edge_pixels": 0,
-          "chroma_adjacent_pixels": 0
+          "chroma_adjacent_pixels": 129
         },
         {
           "index": 2,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running-right\\02.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running-right\\02.png",
           "width": 192,
           "height": 208,
-          "nontransparent_pixels": 12311,
+          "nontransparent_pixels": 9985,
           "bbox": [
-            31,
-            6,
-            159,
-            202
+            36,
+            33,
+            156,
+            198
           ],
           "edge_pixels": 0,
-          "chroma_adjacent_pixels": 0
+          "chroma_adjacent_pixels": 107
         },
         {
           "index": 3,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running-right\\03.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running-right\\03.png",
           "width": 192,
           "height": 208,
-          "nontransparent_pixels": 12107,
+          "nontransparent_pixels": 9734,
           "bbox": [
-            32,
-            6,
-            159,
-            202
+            36,
+            15,
+            156,
+            176
           ],
           "edge_pixels": 0,
-          "chroma_adjacent_pixels": 0
+          "chroma_adjacent_pixels": 114
         },
         {
           "index": 4,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running-right\\04.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running-right\\04.png",
           "width": 192,
           "height": 208,
-          "nontransparent_pixels": 13073,
+          "nontransparent_pixels": 9624,
           "bbox": [
-            30,
-            6,
-            160,
-            202
+            37,
+            5,
+            154,
+            164
           ],
           "edge_pixels": 0,
-          "chroma_adjacent_pixels": 0
+          "chroma_adjacent_pixels": 109
         },
         {
           "index": 5,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running-right\\05.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running-right\\05.png",
           "width": 192,
           "height": 208,
-          "nontransparent_pixels": 12811,
+          "nontransparent_pixels": 10015,
           "bbox": [
-            30,
-            6,
-            160,
-            202
+            35,
+            23,
+            156,
+            187
           ],
           "edge_pixels": 0,
-          "chroma_adjacent_pixels": 0
+          "chroma_adjacent_pixels": 118
         },
         {
           "index": 6,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running-right\\06.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running-right\\06.png",
           "width": 192,
           "height": 208,
-          "nontransparent_pixels": 12155,
+          "nontransparent_pixels": 9922,
           "bbox": [
-            32,
-            6,
-            159,
-            202
+            36,
+            51,
+            156,
+            203
           ],
           "edge_pixels": 0,
-          "chroma_adjacent_pixels": 0
+          "chroma_adjacent_pixels": 123
         },
         {
           "index": 7,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running-right\\07.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running-right\\07.png",
           "width": 192,
           "height": 208,
-          "nontransparent_pixels": 12500,
+          "nontransparent_pixels": 10128,
           "bbox": [
-            31,
-            6,
-            159,
-            202
+            37,
+            42,
+            155,
+            203
           ],
           "edge_pixels": 0,
-          "chroma_adjacent_pixels": 0
+          "chroma_adjacent_pixels": 89
         }
       ]
     },
@@ -274,123 +274,123 @@
       "frames": [
         {
           "index": 0,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running-left\\00.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running-left\\00.png",
           "width": 192,
           "height": 208,
-          "nontransparent_pixels": 12549,
+          "nontransparent_pixels": 9396,
           "bbox": [
-            32,
-            6,
-            160,
-            202
+            40,
+            30,
+            151,
+            203
           ],
           "edge_pixels": 0,
-          "chroma_adjacent_pixels": 0
+          "chroma_adjacent_pixels": 113
         },
         {
           "index": 1,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running-left\\01.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running-left\\01.png",
           "width": 192,
           "height": 208,
-          "nontransparent_pixels": 12951,
+          "nontransparent_pixels": 8948,
           "bbox": [
-            30,
-            6,
-            161,
-            202
+            38,
+            47,
+            153,
+            203
           ],
           "edge_pixels": 0,
-          "chroma_adjacent_pixels": 0
+          "chroma_adjacent_pixels": 109
         },
         {
           "index": 2,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running-left\\02.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running-left\\02.png",
           "width": 192,
           "height": 208,
-          "nontransparent_pixels": 12846,
+          "nontransparent_pixels": 9222,
           "bbox": [
-            31,
-            6,
-            161,
-            202
+            39,
+            32,
+            152,
+            201
           ],
           "edge_pixels": 0,
-          "chroma_adjacent_pixels": 0
+          "chroma_adjacent_pixels": 123
         },
         {
           "index": 3,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running-left\\03.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running-left\\03.png",
           "width": 192,
           "height": 208,
-          "nontransparent_pixels": 12278,
+          "nontransparent_pixels": 9425,
           "bbox": [
-            30,
-            6,
-            161,
-            202
+            38,
+            12,
+            153,
+            181
           ],
           "edge_pixels": 0,
-          "chroma_adjacent_pixels": 0
+          "chroma_adjacent_pixels": 107
         },
         {
           "index": 4,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running-left\\04.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running-left\\04.png",
           "width": 192,
           "height": 208,
-          "nontransparent_pixels": 12892,
+          "nontransparent_pixels": 9385,
           "bbox": [
-            30,
-            6,
-            162,
-            202
+            38,
+            5,
+            153,
+            171
           ],
           "edge_pixels": 0,
-          "chroma_adjacent_pixels": 0
+          "chroma_adjacent_pixels": 120
         },
         {
           "index": 5,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running-left\\05.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running-left\\05.png",
           "width": 192,
           "height": 208,
-          "nontransparent_pixels": 12173,
+          "nontransparent_pixels": 9308,
           "bbox": [
-            31,
-            6,
-            161,
-            202
+            38,
+            22,
+            153,
+            189
           ],
           "edge_pixels": 0,
-          "chroma_adjacent_pixels": 0
+          "chroma_adjacent_pixels": 116
         },
         {
           "index": 6,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running-left\\06.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running-left\\06.png",
           "width": 192,
           "height": 208,
-          "nontransparent_pixels": 13892,
+          "nontransparent_pixels": 8878,
           "bbox": [
-            27,
-            6,
-            165,
-            202
+            39,
+            47,
+            152,
+            203
           ],
           "edge_pixels": 0,
-          "chroma_adjacent_pixels": 0
+          "chroma_adjacent_pixels": 115
         },
         {
           "index": 7,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running-left\\07.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running-left\\07.png",
           "width": 192,
           "height": 208,
-          "nontransparent_pixels": 12843,
+          "nontransparent_pixels": 9510,
           "bbox": [
+            40,
             30,
-            6,
-            161,
-            202
+            151,
+            203
           ],
           "edge_pixels": 0,
-          "chroma_adjacent_pixels": 0
+          "chroma_adjacent_pixels": 127
         }
       ]
     },
@@ -407,7 +407,7 @@
       "frames": [
         {
           "index": 0,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\waving\\00.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\waving\\00.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 12622,
@@ -422,7 +422,7 @@
         },
         {
           "index": 1,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\waving\\01.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\waving\\01.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 12699,
@@ -437,7 +437,7 @@
         },
         {
           "index": 2,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\waving\\02.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\waving\\02.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 12916,
@@ -452,7 +452,7 @@
         },
         {
           "index": 3,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\waving\\03.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\waving\\03.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 12444,
@@ -480,7 +480,7 @@
       "frames": [
         {
           "index": 0,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\jumping\\00.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\jumping\\00.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 10401,
@@ -495,7 +495,7 @@
         },
         {
           "index": 1,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\jumping\\01.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\jumping\\01.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 10447,
@@ -510,7 +510,7 @@
         },
         {
           "index": 2,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\jumping\\02.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\jumping\\02.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 10243,
@@ -525,7 +525,7 @@
         },
         {
           "index": 3,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\jumping\\03.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\jumping\\03.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 10355,
@@ -540,7 +540,7 @@
         },
         {
           "index": 4,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\jumping\\04.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\jumping\\04.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 10371,
@@ -568,7 +568,7 @@
       "frames": [
         {
           "index": 0,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\failed\\00.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\failed\\00.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 13508,
@@ -583,7 +583,7 @@
         },
         {
           "index": 1,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\failed\\01.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\failed\\01.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 14147,
@@ -598,7 +598,7 @@
         },
         {
           "index": 2,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\failed\\02.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\failed\\02.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 16438,
@@ -613,7 +613,7 @@
         },
         {
           "index": 3,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\failed\\03.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\failed\\03.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 19276,
@@ -628,7 +628,7 @@
         },
         {
           "index": 4,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\failed\\04.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\failed\\04.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 15680,
@@ -643,7 +643,7 @@
         },
         {
           "index": 5,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\failed\\05.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\failed\\05.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 14756,
@@ -658,7 +658,7 @@
         },
         {
           "index": 6,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\failed\\06.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\failed\\06.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 13052,
@@ -673,7 +673,7 @@
         },
         {
           "index": 7,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\failed\\07.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\failed\\07.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 13052,
@@ -701,7 +701,7 @@
       "frames": [
         {
           "index": 0,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\waiting\\00.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\waiting\\00.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 12470,
@@ -716,7 +716,7 @@
         },
         {
           "index": 1,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\waiting\\01.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\waiting\\01.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 13344,
@@ -731,7 +731,7 @@
         },
         {
           "index": 2,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\waiting\\02.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\waiting\\02.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 14981,
@@ -746,7 +746,7 @@
         },
         {
           "index": 3,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\waiting\\03.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\waiting\\03.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 13472,
@@ -761,7 +761,7 @@
         },
         {
           "index": 4,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\waiting\\04.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\waiting\\04.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 12014,
@@ -776,7 +776,7 @@
         },
         {
           "index": 5,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\waiting\\05.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\waiting\\05.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 12796,
@@ -804,7 +804,7 @@
       "frames": [
         {
           "index": 0,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running\\00.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running\\00.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 13770,
@@ -819,7 +819,7 @@
         },
         {
           "index": 1,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running\\01.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running\\01.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 13612,
@@ -834,7 +834,7 @@
         },
         {
           "index": 2,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running\\02.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running\\02.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 13593,
@@ -849,7 +849,7 @@
         },
         {
           "index": 3,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running\\03.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running\\03.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 13456,
@@ -864,7 +864,7 @@
         },
         {
           "index": 4,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running\\04.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running\\04.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 13611,
@@ -879,7 +879,7 @@
         },
         {
           "index": 5,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\running\\05.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\running\\05.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 13474,
@@ -907,7 +907,7 @@
       "frames": [
         {
           "index": 0,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\review\\00.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\review\\00.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 11799,
@@ -922,7 +922,7 @@
         },
         {
           "index": 1,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\review\\01.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\review\\01.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 11911,
@@ -937,7 +937,7 @@
         },
         {
           "index": 2,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\review\\02.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\review\\02.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 11588,
@@ -952,7 +952,7 @@
         },
         {
           "index": 3,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\review\\03.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\review\\03.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 11872,
@@ -967,7 +967,7 @@
         },
         {
           "index": 4,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\review\\04.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\review\\04.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 11668,
@@ -982,7 +982,7 @@
         },
         {
           "index": 5,
-          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v2\\frames\\review\\05.png",
+          "file": "C:\\Users\\hkfather\\Documents\\Codex\\2026-09-14\\new-chat\\work\\graduation-zombie-pet-v3-directional-hop\\frames\\review\\05.png",
           "width": 192,
           "height": 208,
           "nontransparent_pixels": 11757,
