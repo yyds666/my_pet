@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "petId": "graduate-zombie",
+  "spriteVersionNumber": 2,
+  "spritesheet": "final/spritesheet-extended.webp",
+  "dimensions": "1536x2288",
+  "standardAnimationRows": 9,
+  "lookDirections": 16,
+  "visualQA": "pass",
+  "jumpingMotion": "arms-forward legs-together upright vertical zombie hop",
+  "warnings": "minor review-only continuity and intermediate-direction warnings accepted after independent visual review"
+}
