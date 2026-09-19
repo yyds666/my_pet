@@ -9,12 +9,12 @@ from __future__ import annotations
 
 import argparse
 import ctypes
-import json
 import math
 import os
 import sys
 import time
 import tkinter as tk
+import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
@@ -30,7 +30,6 @@ TRANSPARENT_KEY = "#ff00ff"
 MIN_PET_WIDTH = 80
 MAX_PET_WIDTH = 224
 DEFAULT_CODEX_PET_WIDTH = 112
-DEFAULT_SIZE_STEP = 16
 ALPHA_CUTOFF = 48
 CODEX_SIZE_KEY = "avatar-overlay-mascot-width-px"
 
@@ -53,66 +52,30 @@ def default_codex_home() -> Path:
 
 
 class CodexPetBridge:
-    """Read shared assets/config and follow Codex's persisted pet-size setting."""
+    """Follow the pet width that Codex persists in its desktop settings."""
 
     def __init__(self, pet_dir: Path, codex_home: Path | None = None) -> None:
         self.pet_dir = pet_dir
         self.codex_home = codex_home or default_codex_home()
-        self.global_state_path = self.codex_home / ".codex-global-state.json"
-        self.runner_config_path = self.pet_dir / "windows-runner.json"
+        self.config_path = self.codex_home / "config.toml"
 
     @staticmethod
-    def _read_json(path: Path) -> dict:
+    def _read_toml(path: Path) -> dict:
         try:
-            value = json.loads(path.read_text(encoding="utf-8"))
+            with path.open("rb") as stream:
+                value = tomllib.load(stream)
             return value if isinstance(value, dict) else {}
-        except (OSError, ValueError, TypeError):
+        except (OSError, tomllib.TOMLDecodeError, TypeError):
             return {}
 
     def read_codex_width(self) -> int:
-        configured_key = self.runner_config().get("codexSizeKey", CODEX_SIZE_KEY)
-        size_key = configured_key if isinstance(configured_key, str) else CODEX_SIZE_KEY
-        state = self._read_json(self.global_state_path)
-        atoms = state.get("electron-persisted-atom-state", {})
-        raw = atoms.get(size_key, DEFAULT_CODEX_PET_WIDTH) if isinstance(atoms, dict) else DEFAULT_CODEX_PET_WIDTH
+        config = self._read_toml(self.config_path)
+        desktop = config.get("desktop", {})
+        raw = desktop.get(CODEX_SIZE_KEY, DEFAULT_CODEX_PET_WIDTH) if isinstance(desktop, dict) else DEFAULT_CODEX_PET_WIDTH
         return clamp_pet_width(raw if isinstance(raw, (int, float)) else DEFAULT_CODEX_PET_WIDTH)
 
-    def runner_config(self) -> dict:
-        return self._read_json(self.runner_config_path)
-
-    def size_step(self) -> int:
-        raw = self.runner_config().get("sizeStepPx", DEFAULT_SIZE_STEP)
-        if not isinstance(raw, (int, float)):
-            return DEFAULT_SIZE_STEP
-        return max(4, min(48, round(raw)))
-
-    def size_offset(self) -> int:
-        raw = self.runner_config().get("sizeOffsetPx", 0)
-        return round(raw) if isinstance(raw, (int, float)) else 0
-
     def effective_width(self) -> int:
-        return clamp_pet_width(self.read_codex_width() + self.size_offset())
-
-    def set_size_offset(self, offset: int) -> None:
-        config = self.runner_config()
-        configured_key = config.get("codexSizeKey", CODEX_SIZE_KEY)
-        size_key = configured_key if isinstance(configured_key, str) else CODEX_SIZE_KEY
-        config.update(
-            {
-                "schemaVersion": 1,
-                "petId": "graduate-zombie",
-                "followCodexPetSize": True,
-                "codexSizeKey": size_key,
-                "sizeOffsetPx": round(offset),
-                "sizeStepPx": self.size_step(),
-                "minimumWidthPx": MIN_PET_WIDTH,
-                "maximumWidthPx": MAX_PET_WIDTH,
-            }
-        )
-        self.pet_dir.mkdir(parents=True, exist_ok=True)
-        temporary = self.runner_config_path.with_suffix(".json.tmp")
-        temporary.write_text(json.dumps(config, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        os.replace(temporary, self.runner_config_path)
+        return self.read_codex_width()
 
 
 @dataclass(frozen=True)
@@ -232,10 +195,6 @@ class ThoughtPalette:
         pet_rect: tuple[int, int, int, int],
         work_area: tuple[int, int, int, int],
         choose: Callable[[str], None],
-        pet_width: int,
-        shrink: Callable[[], None],
-        enlarge: Callable[[], None],
-        follow_codex: Callable[[], None],
     ) -> None:
         self.choose = choose
         self.window = tk.Toplevel(parent)
@@ -247,7 +206,7 @@ class ThoughtPalette:
         except tk.TclError:
             pass
 
-        width, height = 252, 146
+        width, height = 252, 104
         pet_x, pet_y, pet_w, _ = pet_rect
         left, top, right, bottom = work_area
         x = max(left, min(right - width, pet_x + pet_w // 2 - width // 2))
@@ -294,36 +253,6 @@ class ThoughtPalette:
             canvas.tag_bind(tag, "<Enter>", lambda event, t=tag: self._hover(canvas, t, True))
             canvas.tag_bind(tag, "<Leave>", lambda event, t=tag: self._hover(canvas, t, False))
             canvas.tag_bind(tag, "<Button-1>", lambda event, d=direction: self.choose(d))
-
-        button_style = {
-            "bg": "#dff3ff",
-            "fg": "#173f67",
-            "activebackground": "#9edcff",
-            "activeforeground": "#173f67",
-            "relief": "flat",
-            "font": ("Microsoft YaHei UI", 10, "bold"),
-            "cursor": "hand2",
-            "takefocus": False,
-        }
-        tk.Button(self.window, text="−", command=shrink, **button_style).place(
-            x=13, y=106, width=38, height=30
-        )
-        tk.Label(
-            self.window,
-            text=f"{pet_width}px",
-            bg="#fffdf7",
-            fg="#26334d",
-            font=("Microsoft YaHei UI", 9, "bold"),
-        ).place(x=57, y=106, width=58, height=30)
-        tk.Button(self.window, text="+", command=enlarge, **button_style).place(
-            x=121, y=106, width=38, height=30
-        )
-        tk.Button(
-            self.window,
-            text="跟随 Codex",
-            command=follow_codex,
-            **button_style,
-        ).place(x=165, y=106, width=76, height=30)
 
     @staticmethod
     def _hover(canvas: tk.Canvas, tag: str, active: bool) -> None:
@@ -396,8 +325,6 @@ class DesktopPet:
 
         self.context_menu = tk.Menu(root, tearoff=False)
         self.context_menu.add_command(label="选择蹦跳方向", command=self.show_thoughts)
-        self.context_menu.add_command(label="显示大小按钮", command=self.show_thoughts)
-        self.context_menu.add_command(label="跟随 Codex 尺寸", command=self.follow_codex_width)
         self.context_menu.add_command(label="回到初始位置", command=self.return_home)
         self.context_menu.add_separator()
         self.context_menu.add_command(label="退出互动桌宠", command=self.close)
@@ -467,24 +394,6 @@ class DesktopPet:
         self.root.geometry(f"{self.width}x{self.height}+{new_x}+{new_y}")
         self.home = (right - self.width - 48, bottom - self.height - 36)
         self.render_frame()
-
-    def change_width(self, delta: int) -> None:
-        if self.traveling:
-            return
-        target = clamp_pet_width(self.width + delta)
-        codex_width = self.bridge.read_codex_width()
-        self.bridge.set_size_offset(target - codex_width)
-        self.hide_thoughts()
-        self.apply_width(target)
-        self.root.after(80, self.show_thoughts)
-
-    def follow_codex_width(self) -> None:
-        if self.traveling:
-            return
-        self.bridge.set_size_offset(0)
-        self.hide_thoughts()
-        self.apply_width(self.bridge.read_codex_width())
-        self.root.after(80, self.show_thoughts)
 
     def sync_codex_size(self) -> None:
         self.size_sync_job = None
@@ -564,10 +473,6 @@ class DesktopPet:
             (x, y, self.width, self.height),
             self.work_area(),
             self.choose_direction,
-            self.width,
-            lambda: self.change_width(-self.bridge.size_step()),
-            lambda: self.change_width(self.bridge.size_step()),
-            self.follow_codex_width,
         )
 
     def hide_thoughts(self) -> None:
